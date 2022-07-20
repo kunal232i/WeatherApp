@@ -1,12 +1,11 @@
 const cityInput = document.getElementById("city-input");
-const search = document.getElementById("search");
-const city = document.getElementById("city-name");
 const weatherType = document.getElementById("weather-type");
 const temp = document.getElementById("temp");
 const minTemp = document.getElementById("min-temp");
 const maxTemp = document.getElementById("max-temp");
 
-getWeatherData = (city) => {
+const getWeatherData = (city) => {
+  console.log(city);
   const options = {
     method: "GET",
     headers: {
@@ -17,21 +16,29 @@ getWeatherData = (city) => {
   const URL = `https://community-open-weather-map.p.rapidapi.com/weather?q=${city}&units=imperial`;
   fetch(URL, options)
     .then((response) => response.json())
-    .then((data) => console.log(data))
+    .then((data) => {
+      const weatherData = data;
+      showWeatherData(weatherData);
+    })
     .catch((err) => console.error(err));
 };
 
-getWeatherData(cityInput.value);
-/**
- * Retrieve city input and get the weather data
- * HINT: Use the promise returned from getWeatherData()
- */
-// const searchCity = () => {
-//   city.value;
-// };
+const searchCity = () => {
+  const city = document.getElementById("city-name");
+  getWeatherData(cityInput.value);
+  city.innerHTML = `<h2>${cityInput.value}</h2>`;
+};
 
-// /**
-//  * Show the weather data in HTML
-//  * HINT: make sure to console log the weatherData to see how the data looks like
-//  */
-// const showWeatherData = (weatherData) => {};
+const showWeatherData = (weatherData) => {
+  weatherType.innerHTML = `<h2>${weatherData.weather[0].main}</h2>`;
+  const Temp = fToC(weatherData.main.temp);
+  temp.innerHTML = `<h3>${Temp}</h3>`;
+
+  const min = fToC(weatherData.main.temp_min);
+  minTemp.innerHTML = `<h4>${min}</h4>`;
+
+  const max = fToC(weatherData.main.temp_max);
+  maxTemp.innerHTML = `<h4>${max}</h4>`;
+};
+
+const fToC = (fTemp) => Math.floor(((fTemp - 32) * 5) / 9);
