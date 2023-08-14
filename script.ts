@@ -32,19 +32,18 @@ interface WeatherData {
   };
 }
 
+
 const showWeatherData = (weatherData: WeatherData): void => {
   if (weatherData.weather.length > 0) {
     weatherType.innerHTML = `<h2>${weatherData.weather[0].main}</h2>`;
   }
 
-  const Temp = fToC(weatherData.main.temp);
-  temp.innerHTML = `<h3>${Temp}</h3>`;
+  const tempCelsius = weatherData.main.temp - 273.15;
+  temp.innerHTML = `<h3>${tempCelsius.toFixed(1)}°C</h3>`;
 
-  const min = fToC(weatherData.main.temp_min);
-  minTemp.innerHTML = `<h4>${min}</h4>`;
+  const minCelsius = weatherData.main.temp_min - 273.15;
+  minTemp.innerHTML = `<h4>${minCelsius.toFixed(1)}°C</h4>`;
 
-  const max = fToC(weatherData.main.temp_max);
-  maxTemp.innerHTML = `<h4>${max}</h4>`;
+  const maxCelsius = weatherData.main.temp_max - 273.15;
+  maxTemp.innerHTML = `<h4>${maxCelsius.toFixed(1)}°C</h4>`;
 };
-
-const fToC = (fTemp: number): number => Math.floor(((fTemp - 32) * 5) / 9);
